@@ -6,6 +6,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
@@ -42,5 +44,12 @@ class CoroutinesController(builder: WebClient.Builder) {
     fun deferredEndpointAsync(): Deferred<Banner> = GlobalScope.async {
         delay(10)
         banner
+    }
+
+    @GetMapping("/")
+    suspend fun render(model: Model): String {
+        delay(10)
+        model["banner"] = banner
+        return "index"
     }
 }
