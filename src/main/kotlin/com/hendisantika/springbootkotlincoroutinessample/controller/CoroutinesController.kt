@@ -1,8 +1,14 @@
 package com.hendisantika.springbootkotlincoroutinessample.controller
 
 import com.hendisantika.springbootkotlincoroutinessample.Banner
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.reactive.function.client.WebClient
 import java.time.LocalDateTime
 
@@ -29,5 +35,12 @@ class CoroutinesController(builder: WebClient.Builder) {
     suspend fun suspendingEndpoint(): Banner {
         delay(10)
         return banner
+    }
+
+    @GetMapping("/deferred")
+    @ResponseBody
+    fun deferredEndpointAsync(): Deferred<Banner> = GlobalScope.async {
+        delay(10)
+        banner
     }
 }
