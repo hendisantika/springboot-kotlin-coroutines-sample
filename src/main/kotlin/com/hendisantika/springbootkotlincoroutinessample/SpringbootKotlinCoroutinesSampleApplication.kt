@@ -3,6 +3,7 @@ package com.hendisantika.springbootkotlincoroutinessample
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import java.time.LocalDateTime
 
 @SpringBootApplication
 class SpringbootKotlinCoroutinesSampleApplication {
@@ -16,7 +17,8 @@ class SpringbootKotlinCoroutinesSampleApplication {
     }
 }
 
-
 fun main(args: Array<String>) {
     runApplication<SpringbootKotlinCoroutinesSampleApplication>(*args)
 }
+
+data class Banner(val title: String, val message: String, val date: LocalDateTime)
