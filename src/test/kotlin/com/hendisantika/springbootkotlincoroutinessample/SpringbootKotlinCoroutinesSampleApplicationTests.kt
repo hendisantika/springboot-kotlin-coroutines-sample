@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBody
 import java.time.LocalDateTime
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -28,5 +29,16 @@ class SpringbootKotlinCoroutinesSampleApplicationTests(@Autowired val client: We
             .is2xxSuccessful
             .expectBody<Banner>()
             .isEqualTo(banner)
+    }
+
+    @Test
+    fun sequentialFlow() {
+        client.get()
+            .uri("/sequential-flow")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .is2xxSuccessful
+            .expectBodyList<Banner>().contains(banner, banner, banner, banner)
     }
 }
