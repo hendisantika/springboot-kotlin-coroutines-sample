@@ -1,13 +1,15 @@
 package com.hendisantika.springbootkotlincoroutinessample
 
-import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.web.reactive.server.WebTestClient
+import java.time.LocalDateTime
 
-@SpringBootTest
-class SpringbootKotlinCoroutinesSampleApplicationTests {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+class SpringbootKotlinCoroutinesSampleApplicationTests(@Autowired val client: WebTestClient) {
 
-    @Test
-    fun contextLoads() {
-    }
+    private val banner =
+        Banner("title", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", LocalDateTime.now())
+
 
 }
