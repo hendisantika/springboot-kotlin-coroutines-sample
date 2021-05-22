@@ -51,7 +51,7 @@ class CoroutinesController(builder: WebClient.Builder) {
         banner
     }
 
-    @GetMapping("/")
+    @GetMapping
     suspend fun render(model: Model): String {
         delay(10)
         model["banner"] = banner
