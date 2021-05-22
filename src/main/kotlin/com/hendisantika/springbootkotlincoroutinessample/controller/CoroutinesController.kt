@@ -5,6 +5,8 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.awaitBody
 import java.time.LocalDateTime
 
 /**
@@ -51,5 +54,20 @@ class CoroutinesController(builder: WebClient.Builder) {
         delay(10)
         model["banner"] = banner
         return "index"
+    }
+
+    @GetMapping("/sequential-flow")
+    @ResponseBody
+    suspend fun sequentialFlow() = flow {
+        for (i in 1..4) {
+            emit(
+                client
+                    .get()
+                    .uri("/suspend")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .awaitBody<Banner>()
+            )
+        }
     }
 }
