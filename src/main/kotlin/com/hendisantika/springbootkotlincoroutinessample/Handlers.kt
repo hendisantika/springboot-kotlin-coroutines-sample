@@ -77,4 +77,8 @@ class Handlers(builder: WebClient.Builder) {
             .bodyAndAwait(it)
     }
 
+    suspend fun error(request: ServerRequest): ServerResponse {
+        throw IllegalStateException()
+    }
+
 }
