@@ -52,4 +52,10 @@ class SpringbootKotlinCoroutinesSampleApplicationTests(@Autowired val client: We
             .is2xxSuccessful
             .expectBodyList<Banner>().contains(banner, banner, banner, banner)
     }
+
+    @Test
+    fun error() {
+        client.get().uri("/error").exchange().expectStatus().is5xxServerError
+    }
+
 }
