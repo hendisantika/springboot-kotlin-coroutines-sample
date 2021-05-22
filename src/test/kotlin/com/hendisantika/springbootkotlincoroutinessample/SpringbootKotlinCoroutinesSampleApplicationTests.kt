@@ -1,7 +1,9 @@
 package com.hendisantika.springbootkotlincoroutinessample
 
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import java.time.LocalDateTime
 
@@ -16,5 +18,15 @@ class SpringbootKotlinCoroutinesSampleApplicationTests(@Autowired val client: We
         client.get().uri("/").exchange().expectStatus().is2xxSuccessful.expectBody()
     }
 
-
+    @Test
+    fun suspending() {
+        client.get()
+            .uri("/suspend")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .is2xxSuccessful
+            .expectBody<Banner>()
+            .isEqualTo(banner)
+    }
 }
