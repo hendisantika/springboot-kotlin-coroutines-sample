@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
+import org.springframework.web.reactive.function.client.bodyToFlow
 import java.time.LocalDateTime
 
 /**
@@ -89,4 +90,14 @@ class CoroutinesController(builder: WebClient.Builder) {
             )
         }
     }
+
+    @GetMapping("/flow-via-webclient")
+    @ResponseBody
+    suspend fun flowViaWebClient() =
+        client.get()
+            .uri("/concurrent-flow")
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .bodyToFlow<Banner>()
+
 }
