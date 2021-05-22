@@ -38,4 +38,21 @@ class Handlers(builder: WebClient.Builder) {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValueAndAwait(banner)
 
+    suspend fun sequentialFlow(request: ServerRequest) = flow {
+        for (i in 1..4) {
+            emit(
+                client
+                    .get()
+                    .uri("/suspend")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .awaitBody<Banner>()
+            )
+        }
+    }.let {
+        ServerResponse
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyAndAwait(it)
+    }
 }
