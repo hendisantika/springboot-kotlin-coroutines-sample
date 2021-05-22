@@ -1,9 +1,11 @@
 package com.hendisantika.springbootkotlincoroutinessample
 
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.bodyValueAndAwait
 import org.springframework.web.reactive.function.server.renderAndAwait
 import java.time.LocalDateTime
 
@@ -30,5 +32,10 @@ class Handlers(builder: WebClient.Builder) {
             .ok()
             .renderAndAwait("index", mapOf("banner" to banner))
 
+    suspend fun suspending(request: ServerRequest) =
+        ServerResponse
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValueAndAwait(banner)
 
 }
