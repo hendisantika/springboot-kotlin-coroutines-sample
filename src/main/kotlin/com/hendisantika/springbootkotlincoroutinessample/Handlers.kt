@@ -2,6 +2,9 @@ package com.hendisantika.springbootkotlincoroutinessample
 
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.server.ServerRequest
+import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.renderAndAwait
 import java.time.LocalDateTime
 
 /**
@@ -21,5 +24,11 @@ class Handlers(builder: WebClient.Builder) {
         Banner("title", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", LocalDateTime.now())
 
     private val client = builder.baseUrl("http://localhost:8080").build()
+
+    suspend fun index(request: ServerRequest) =
+        ServerResponse
+            .ok()
+            .renderAndAwait("index", mapOf("banner" to banner))
+
 
 }
