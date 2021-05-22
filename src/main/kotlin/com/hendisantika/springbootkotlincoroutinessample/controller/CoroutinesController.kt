@@ -100,4 +100,10 @@ class CoroutinesController(builder: WebClient.Builder) {
             .retrieve()
             .bodyToFlow<Banner>()
 
+    @GetMapping("/error")
+    @ResponseBody
+    suspend fun error() {
+        throw IllegalStateException()
+    }
+
 }
