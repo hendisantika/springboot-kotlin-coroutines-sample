@@ -41,4 +41,15 @@ class SpringbootKotlinCoroutinesSampleApplicationTests(@Autowired val client: We
             .is2xxSuccessful
             .expectBodyList<Banner>().contains(banner, banner, banner, banner)
     }
+
+    @Test
+    fun concurrentFlow() {
+        client.get()
+            .uri("/concurrent-flow")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .is2xxSuccessful
+            .expectBodyList<Banner>().contains(banner, banner, banner, banner)
+    }
 }
