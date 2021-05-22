@@ -11,5 +11,10 @@ class SpringbootKotlinCoroutinesSampleApplicationTests(@Autowired val client: We
     private val banner =
         Banner("title", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", LocalDateTime.now())
 
+    @Test
+    fun index() {
+        client.get().uri("/").exchange().expectStatus().is2xxSuccessful.expectBody()
+    }
+
 
 }
