@@ -24,4 +24,10 @@ class CoroutinesController(builder: WebClient.Builder) {
 
     private val client = builder.baseUrl("http://localhost:8080/coroutines").build()
 
+    @GetMapping("/suspend")
+    @ResponseBody
+    suspend fun suspendingEndpoint(): Banner {
+        delay(10)
+        return banner
+    }
 }
