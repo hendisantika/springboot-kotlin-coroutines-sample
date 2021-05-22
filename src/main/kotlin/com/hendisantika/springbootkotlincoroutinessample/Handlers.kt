@@ -1,12 +1,12 @@
 package com.hendisantika.springbootkotlincoroutinessample
 
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flow
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse
-import org.springframework.web.reactive.function.server.bodyValueAndAwait
-import org.springframework.web.reactive.function.server.renderAndAwait
+import org.springframework.web.reactive.function.client.awaitBody
+import org.springframework.web.reactive.function.server.*
 import java.time.LocalDateTime
 
 /**
@@ -55,4 +55,26 @@ class Handlers(builder: WebClient.Builder) {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyAndAwait(it)
     }
+
+    // TODO Improve when https://github.com/Kotlin/kotlinx.coroutines/issues/1147 will be fixed
+    suspend fun concurrentFlow(request: ServerRequest): ServerResponse = flow {
+        for (i in 1..4) emit("/suspend")
+    }.flatMapMerge {
+        flow {
+            emit(
+                client
+                    .get()
+                    .uri(it)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .awaitBody<Banner>()
+            )
+        }
+    }.let {
+        ServerResponse
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyAndAwait(it)
+    }
+
 }
