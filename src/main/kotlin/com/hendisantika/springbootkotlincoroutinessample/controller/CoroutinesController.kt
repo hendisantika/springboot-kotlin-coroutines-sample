@@ -5,6 +5,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
@@ -64,6 +65,24 @@ class CoroutinesController(builder: WebClient.Builder) {
                 client
                     .get()
                     .uri("/suspend")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .awaitBody<Banner>()
+            )
+        }
+    }
+
+    // TODO Improve when https://github.com/Kotlin/kotlinx.coroutines/issues/1147 will be fixed
+    @GetMapping("/concurrent-flow")
+    @ResponseBody
+    suspend fun concurrentFlow() = flow {
+        for (i in 1..4) emit("/suspend")
+    }.flatMapMerge {
+        flow {
+            emit(
+                client
+                    .get()
+                    .uri(it)
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .awaitBody<Banner>()
