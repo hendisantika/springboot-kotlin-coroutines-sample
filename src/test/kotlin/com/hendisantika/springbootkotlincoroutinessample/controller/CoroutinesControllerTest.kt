@@ -1,6 +1,7 @@
 package com.hendisantika.springbootkotlincoroutinessample.controller
 
 import com.hendisantika.springbootkotlincoroutinessample.Banner
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -20,4 +21,8 @@ class CoroutinesControllerTests(@Autowired val client: WebTestClient) {
     private val banner =
         Banner("title", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", LocalDateTime.now())
 
+    @Test
+    fun index() {
+        client.get().uri("/coroutines/").exchange().expectStatus().is2xxSuccessful.expectBody()
+    }
 }
