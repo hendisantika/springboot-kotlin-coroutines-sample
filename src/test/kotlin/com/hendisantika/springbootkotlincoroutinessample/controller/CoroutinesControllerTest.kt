@@ -51,4 +51,15 @@ class CoroutinesControllerTests(@Autowired val client: WebTestClient) {
             .is2xxSuccessful
             .expectBodyList<Banner>().contains(banner, banner, banner, banner)
     }
+
+    @Test
+    fun parallelFlow() {
+        client.get()
+            .uri("/controller/concurrent-flow")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .is2xxSuccessful
+            .expectBodyList<Banner>().contains(banner, banner, banner, banner)
+    }
 }
