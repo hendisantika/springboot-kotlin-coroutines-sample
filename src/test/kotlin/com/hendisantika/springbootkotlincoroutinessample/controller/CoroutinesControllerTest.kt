@@ -44,7 +44,7 @@ class CoroutinesControllerTests(@Autowired val client: WebTestClient) {
     @Test
     fun sequentialFlow() {
         client.get()
-            .uri("/controller/sequential-flow")
+            .uri("/coroutines/sequential-flow")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
@@ -55,7 +55,7 @@ class CoroutinesControllerTests(@Autowired val client: WebTestClient) {
     @Test
     fun parallelFlow() {
         client.get()
-            .uri("/controller/concurrent-flow")
+            .uri("/coroutines/concurrent-flow")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
@@ -67,11 +67,16 @@ class CoroutinesControllerTests(@Autowired val client: WebTestClient) {
     @Test
     fun flowViaWebClient() {
         client.get()
-            .uri("/controller/flow-via-webclient")
+            .uri("/coroutines/flow-via-webclient")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .is2xxSuccessful
             .expectBodyList<Banner>().contains(banner, banner, banner, banner)
+    }
+
+    @Test
+    fun error() {
+        client.get().uri("/coroutines/error").exchange().expectStatus().is5xxServerError
     }
 }
