@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBody
+import org.springframework.test.web.reactive.server.expectBodyList
 import java.time.LocalDateTime
 
 /**
@@ -31,12 +32,23 @@ class CoroutinesControllerTests(@Autowired val client: WebTestClient) {
     @Test
     fun suspending() {
         client.get()
-            .uri("/controller/suspend")
+            .uri("/coroutines/suspend")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .is2xxSuccessful
             .expectBody<Banner>()
             .isEqualTo(banner)
+    }
+
+    @Test
+    fun sequentialFlow() {
+        client.get()
+            .uri("/controller/sequential-flow")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .is2xxSuccessful
+            .expectBodyList<Banner>().contains(banner, banner, banner, banner)
     }
 }
